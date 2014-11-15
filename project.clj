@@ -3,19 +3,19 @@
   :url "http://example.com/FIXME"
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2280"]
-                 [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
-                 [cljs-http "0.1.15"]
+                 [org.clojure/clojurescript "0.0-2371"]
+                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]
+                 [cljs-http "0.1.20"]
                  [com.cognitect/transit-cljs "0.8.188"]
-                 [markdown-clj "0.9.54"]
+                 [markdown-clj "0.9.55" :exclusions [org.clojure/clojure]]
                  [domina "1.0.2"]
-                 [garden "1.2.1"]
+                 [garden "1.2.5"]
                  [prismatic/dommy "0.1.3"]
                  [hickory "0.5.4"]
                  [om "0.7.0"]]
 
   :plugins [[lein-cljsbuild "1.0.4-SNAPSHOT"]
-            [lein-node-webkit-build "0.1.2"]]
+            [lein-node-webkit-build "0.1.6"]]
 
   :source-paths ["src"]
 
