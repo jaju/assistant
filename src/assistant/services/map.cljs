@@ -1,16 +1,13 @@
 (ns assistant.services.map
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [cljs-http.client :as http]
-            [assistant.core :refer [register-card register-dispatcher register-css config valid-config]]
+  (:require [assistant.core :refer [register-card register-dispatcher register-css config valid-config]]
             [cljs.core.async :refer [<! >! chan]]
-            [hickory.core :as hk]
-            [hickory.select :as s]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]))
 
 
 (def api-key (-> (config)
-                 :map :key))
+               :map :key))
 
 
 (def config-err-msg "Please make sure you have google developer key in your
@@ -26,7 +23,7 @@
   (reify
     om/IRender
     (render [_]
-            (dom/iframe #js {:src (:content data)} nil))))
+      (dom/iframe #js {:src (:content data)} nil))))
 
 
 (register-dispatcher :map map-dispatcher "map [place] -- show the map of given place name")

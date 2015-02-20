@@ -30,14 +30,14 @@
     (render [this]
       (let [links (:content data)]
         (apply dom/ul #js {:className "clearfix"} (map #(dom/li nil
-                                                                (common/link (:url %)
-                                                                             (dom/img #js {:src (str "https://www.google.com/s2/favicons?domain=" (:url %))})
-                                                                             (dom/h4 nil (:title %)))) links))))))
+                                                         (common/link (:url %)
+                                                           (dom/img #js {:src (str "https://www.google.com/s2/favicons?domain=" (:url %))})
+                                                           (dom/h4 nil (:title %)))) links))))))
 
 (register-dispatcher :bookmark bookmark-dispatcher "bookmark -- add bookmark")
 (register-dispatcher :bm bookmark-dispatcher "bm -- add bookmark")
 (register-card :bookmark bookmark-card)
 (register-css [:.bookmark
-                        [ :ul
-                         [:li
-                          [:img {:float "left" :margin-right "10px"}]]]])
+               [:ul
+                [:li
+                 [:img {:float "left" :margin-right "10px"}]]]])

@@ -4,8 +4,6 @@
             [assistant.core :refer [register-card register-dispatcher register-css config valid-config]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<! >! chan]]
-            [hickory.core :as hk]
-            [hickory.select :as s]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]))
 
@@ -15,11 +13,10 @@
 
 (def config-err-msg "Please make sure you have following configs in ~/.assistant file. {:jira {:endpoint '...' :username: '...' :password: '...'}}.")
 
-
 (defn check-jira-config []
   (and (valid-config [:jira :endpoint] config-err-msg)
-       (valid-config [:jira :username] config-err-msg)
-       (valid-config [:jira :password] config-err-msg)))
+    (valid-config [:jira :username] config-err-msg)
+    (valid-config [:jira :password] config-err-msg)))
 
 
 (defn jira-dispatcher [result-chan text]
@@ -36,11 +33,10 @@
   (reify
     om/IRender
     (render [_]
-            (dom/div #js {:className "clearfix"}
-                     (common/link (str endpoint "/browse/" (:input data)) (dom/h4 nil (-> data :content :key) "  " (-> data :content :fields :summary)))
-                     (dom/p #js {:dangerouslySetInnerHTML #js {:__html (clojure.string/replace (or
-                                                                                                 (-> data :content :fields :description) "") #"\n" "<br>")}} nil)))))
-
+      (dom/div #js {:className "clearfix"}
+        (common/link (str endpoint "/browse/" (:input data)) (dom/h4 nil (-> data :content :key) "  " (-> data :content :fields :summary)))
+        (dom/p #js {:dangerouslySetInnerHTML #js {:__html (clojure.string/replace (or
+                                                                                    (-> data :content :fields :description) "") #"\n" "<br>")}} nil)))))
 
 (register-dispatcher :jira jira-dispatcher "jira [issue-number] -- find jira issue")
 (register-card :jira jira-view)

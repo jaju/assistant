@@ -4,8 +4,6 @@
             [assistant.core :refer [register-card register-dispatcher register-css config valid-config]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<! >! chan]]
-            [hickory.core :as hk]
-            [hickory.select :as s]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]))
 
@@ -28,9 +26,9 @@
 
 (defn check-jenkins-config []
   (and (valid-config [:jenkins :host] config-err-msg)
-       (valid-config [:jenkins :token] config-err-msg)
-       (valid-config [:jenkins :username] config-err-msg)
-       (valid-config [:jenkins :password] config-err-msg)))
+    (valid-config [:jenkins :token] config-err-msg)
+    (valid-config [:jenkins :username] config-err-msg)
+    (valid-config [:jenkins :password] config-err-msg)))
 
 (defn jenkins-dispatcher [result-chan text]
   (if (check-jenkins-config)
@@ -48,10 +46,10 @@
         (print status)
         (>! result-chan (str job-name " build started...")))))
 
-  ;(js/setInterval (fn []
-                    ;(go (let [response (<! (http/post (str host "/job/" job-name "/lastBuild/consoleText")))
-                              ;m (:body response)]
-                          ;(>! result-chan m))) 6000)))
+;(js/setInterval (fn []
+;(go (let [response (<! (http/post (str host "/job/" job-name "/lastBuild/consoleText")))
+;m (:body response)]
+;(>! result-chan m))) 6000)))
 
 (defn jenkins-card [app owner]
   (reify
@@ -70,10 +68,10 @@
     (render-state [this state]
       (dom/div nil
         (apply dom/ul nil (map (fn [job] (dom/li nil
-                                        (common/link (or (-> job :url) (-> job :href)) (-> job :title))
-                                        (dom/button #js {:onClick #(build-job (:name job) console-chan)} "Build"))) (:content app)))
+                                           (common/link (or (-> job :url) (-> job :href)) (-> job :title))
+                                           (dom/button #js {:onClick #(build-job (:name job) console-chan)} "Build"))) (:content app)))
         (dom/h4 nil "Built console logs: ")
-        (dom/code #js {:className "console-text"} (:console-text state)) ))))
+        (dom/code #js {:className "console-text"} (:console-text state))))))
 
 
 (register-dispatcher :ci jenkins-dispatcher "ci -- show jenkins panel")

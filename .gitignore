@@ -14,3 +14,7 @@ pom.xml
 plugins/*.cljs
 public/assistant.js
 
+/.DS_Store
+/.idea
+/Assistant.app
+/assistant.iml

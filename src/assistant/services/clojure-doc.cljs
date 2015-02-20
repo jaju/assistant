@@ -1,11 +1,8 @@
 (ns assistant.services.clojure
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [assistant.common :as common]
-            [assistant.core :refer [register-card register-dispatcher register-css]]
+  (:require [assistant.core :refer [register-card register-dispatcher register-css]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<! >! chan]]
-            [hickory.core :as hk]
-            [hickory.select :as s]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]))
 
@@ -28,16 +25,16 @@
 (register-dispatcher :clj clojure-doc-dispatcher "clj [function name] -- Your awesome clojure doc loop up")
 (register-card :clojure clojure-doc-card)
 (register-css [:.clojure
-                        [ :ul
-                         [:li
-                          [:&:last-child {:margin-bottom "5px"}]
-                          [:&:last-child:after {:content "\"\""}]
-                          [:&:after {:content (str "\"" (apply str (repeat 100 "*")) "\"")}]
-                          {:float "left"
-                           :margin "5px"
-                           :margin-bottom "20px"
-                           :width "100%"
-                           :overflow "auto"
-                           :position "relative"}
-                          [:h4
-                           {:max-width "130px" :text-overflow "ellipsis" :white-space "nowrap" :overflow "hidden"}]]]])
+               [:ul
+                [:li
+                 [:&:last-child {:margin-bottom "5px"}]
+                 [:&:last-child:after {:content "\"\""}]
+                 [:&:after {:content (str "\"" (apply str (repeat 100 "*")) "\"")}]
+                 {:float         "left"
+                  :margin        "5px"
+                  :margin-bottom "20px"
+                  :width         "100%"
+                  :overflow      "auto"
+                  :position      "relative"}
+                 [:h4
+                  {:max-width "130px" :text-overflow "ellipsis" :white-space "nowrap" :overflow "hidden"}]]]])

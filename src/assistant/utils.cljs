@@ -1,22 +1,16 @@
 (ns assistant.utils
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [cljs-http.client :as http]
-            [cljs.core.async :refer [<! >! chan]]
-            [hickory.core :as hk]
-            [hickory.render :as hk-render]
-            [hickory.select :as s]
-            [om.core :as om :include-macros true]
-            [om.dom :as dom :include-macros true]))
+  (:require [cljs.core.async :refer [<! >! chan]]))
 
 (def fs (js/require "fs"))
 
 (defn- get-text [tags]
   (apply str (filter #(> (count (clojure.string/trim %)) 0)
-          (flatten (map (fn [tag] (let [t (goog/typeOf tag)
-                                        cv (:content tag)]
-                                    (if (= t "string")
-                                      tag
-                                      (if cv (get-text cv) "")))) tags)))))
+               (flatten (map (fn [tag] (let [t (goog/typeOf tag)
+                                             cv (:content tag)]
+                                         (if (= t "string")
+                                           tag
+                                           (if cv (get-text cv) "")))) tags)))))
 
 (defn user-home []
   (let [node-env (.-env js/process)]

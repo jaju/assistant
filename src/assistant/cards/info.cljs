@@ -1,11 +1,6 @@
 (ns assistant.cards.info-card
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [assistant.common :as common]
-            [assistant.core :refer [register-card register-dispatcher register-css]]
-            [cljs-http.client :as http]
-            [cljs.core.async :refer [<! >! chan]]
-            [hickory.core :as hk]
-            [hickory.select :as s]
+  (:require [assistant.core :refer [register-card register-dispatcher register-css]]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]))
 
@@ -15,13 +10,13 @@
   (reify
     om/IRender
     (render [this]
-      (dom/div #js {:className info-type } (dom/h4 nil (or title (.toUpperCase info-type)))
-               content))))
+      (dom/div #js {:className info-type} (dom/h4 nil (or title (.toUpperCase info-type)))
+        content))))
 
 (register-card :info-card info-card)
 (register-css [:.info-card
-                        [:.error {:color "#DA4453"}]
-                        [:.success {:color "#8CC152"}]
-                        [:.info {:color "#4A89DC"}]
-                        [:.warn {:color "#F6BB42"}]])
+               [:.error {:color "#DA4453"}]
+               [:.success {:color "#8CC152"}]
+               [:.info {:color "#4A89DC"}]
+               [:.warn {:color "#F6BB42"}]])
 

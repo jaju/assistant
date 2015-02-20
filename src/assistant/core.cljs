@@ -36,9 +36,9 @@
 
 ;; enable default menu
 (defn create-built-in-menu! []
-  (let [win (.get (.-Window gui)) ;; current window
-        Menu (.-Menu gui) ;; create menu
-        mb (Menu. #js {:type "menubar" })]
+  (let [win (.get (.-Window gui))                           ;; current window
+        Menu (.-Menu gui)                                   ;; create menu
+        mb (Menu. #js {:type "menubar"})]
     (.createMacBuiltin mb "Assistant")
     (set! (.-menu win) mb)))
 
@@ -54,7 +54,8 @@
           r (t/reader :json)
           state (t/read r file-content)]
       (print "Restore state now....")
-      state) (catch js/Error e {:cards []})))
+      state)
+    (catch js/Error e {:cards []})))
 
 ;; app state might contains entire application's configuration info
 (def app-state (atom {:cards []}))
@@ -75,7 +76,7 @@
       w (t/writer :json)]
   (.on win "close" #(this-as me (do
                                   (print "Start writing....")
-                                  (utils/write-to-file (str (utils/user-home) "/.assistant-store" ) (t/write w @app-state))
+                                  (utils/write-to-file (str (utils/user-home) "/.assistant-store") (t/write w @app-state))
                                   (.close me true)))))
 
 
@@ -95,7 +96,7 @@
 (defn dispatch-input [result-chan text]
   (let [parts (.split text " ")
         command-name (keyword (first parts))
-        query (clojure.string/join " "(rest parts))
+        query (clojure.string/join " " (rest parts))
         dispatcher (get-in @dispatchers [command-name :exec])]
     (if dispatcher
       ;; using correspond dispatcher/processor to process the text
@@ -120,7 +121,7 @@
 
 (defn card-view [data owner]
   (let [card-type (:type data)
-        card-fn   (get @cards card-type)]
+        card-fn (get @cards card-type)]
     (when card-fn
       (dom/li #js {:className (str "card " (name card-type))} (om/build card-fn data)))))
 
@@ -142,18 +143,18 @@
     (render-state [this state]
       (let [all-cards (:cards app)]
         (dom/div nil
-                 (dom/div #js {:className "prompt"} ">")
-          (dom/input #js {:type "text" :placeholder "Type your commands here..." :autoFocus "autofocus"
-                          :value (:text state)
-                          :onChange #(handle-change % owner state)
+          (dom/div #js {:className "prompt"} ">")
+          (dom/input #js {:type      "text" :placeholder "Type your commands here..." :autoFocus "autofocus"
+                          :value     (:text state)
+                          :onChange  #(handle-change % owner state)
                           :onKeyDown #(when (== (.-keyCode %) 13)
-                                         (dispatch-input dispatcher-chan (:text state))
-                                         (om/set-state! owner :text ""))} "")
+                                       (dispatch-input dispatcher-chan (:text state))
+                                       (om/set-state! owner :text ""))} "")
           (dom/div #js {:className "conversation"}
-                   (if (= (count all-cards) 0)
-                     (empty-card)
-                     (apply dom/ul #js {:className "list"}
-                            (om/build-all card-view-om all-cards))))
+            (if (= (count all-cards) 0)
+              (empty-card)
+              (apply dom/ul #js {:className "list"}
+                (om/build-all card-view-om all-cards))))
 
           (dom/a #js {:className "clear-btn" :href "#" :onClick #(reset! app-state {:cards []})} "Clear"))))))
 
@@ -167,7 +168,7 @@
 
 (defn update-styles []
   (set! (.-innerHTML (. js/document (getElementById "plugin-styles")))
-      (css @styles)))
+    (css @styles)))
 
 (defn register-css
   "Register plugin css for card"
@@ -188,20 +189,20 @@
 ;; built in help dispatcher and card
 (defn help-dispatcher [result-chan text]
   (go
-    (>! result-chan {:type :help :content (map #(:desc %) (vals @dispatchers)) })))
+    (>! result-chan {:type :help :content (map #(:desc %) (vals @dispatchers))})))
 
 (defn help-card [app owner]
   (reify
     om/IRender
     (render [this]
-      (let [commands (-> app :content )
+      (let [commands (-> app :content)
             commands-text (filter #(not= nil %) commands)
             commands-map (map #(hash-map :name (nth (.split % "--") 0) :desc (nth (.split % "--") 1)) commands-text)]
         (dom/div nil
-                 (dom/h2 nil "Available Commands")
-                 (apply dom/ul nil (map #(dom/li nil
-                                                 (dom/span #js {:className "label"} (:name %))
-                                                 (dom/span #js {:className "desc"} (:desc %))) commands-map)))))))
+          (dom/h2 nil "Available Commands")
+          (apply dom/ul nil (map #(dom/li nil
+                                   (dom/span #js {:className "label"} (:name %))
+                                   (dom/span #js {:className "desc"} (:desc %))) commands-map)))))))
 
 (register-dispatcher :help help-dispatcher "help -- show the list of available commands")
 (register-card :help help-card)
@@ -217,8 +218,8 @@
   (reset! app-state (read-app-state)))
 
 (om/root
-  app-view ;; om component
-  app-state ;; app state
+  app-view                                                  ;; om component
+  app-state                                                 ;; app state
   {:target (. js/document (getElementById "app"))})
 
 

@@ -1,13 +1,8 @@
 (ns assistant.services.dribble
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [assistant.common :as common]
-            [assistant.core :refer [register-card register-dispatcher register-css]]
+  (:require [assistant.core :refer [register-card register-dispatcher register-css]]
             [cljs-http.client :as http]
-            [cljs.core.async :refer [<! >! chan]]
-            [hickory.core :as hk]
-            [hickory.select :as s]
-            [om.core :as om :include-macros true]
-            [om.dom :as dom :include-macros true]))
+            [cljs.core.async :refer [<! >! chan]]))
 
 (def url "http://api.dribbble.com/shots/popular")
 
