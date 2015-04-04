@@ -7,12 +7,12 @@
             [cljs.core.async :refer [<! >! chan]]
             [hickory.core :as hk]
             [assistant.utils :as utils]
-            [hickory.select :as s]
             [om.core :as om :include-macros true]
-            [om.dom :as dom :include-macros true]))
+            [om.dom :as dom :include-macros true]
+            [reagent.core :as r]))
 
 ;; a list of plugins installed by default
-;; user can alwasy disalbe them in the ~/.assistant-plugins
+;; user can alwasy disable them in the ~/.assistant-plugins
 
 (defn log [m]
   (.log js/console m))
@@ -49,33 +49,32 @@
   "read app state from ~/.assistant-store"
   (try
     (let [file-name (str (utils/user-home) "/.assistant-store")
-          file-exists (utils/create-if-not-exist file-name)
+          _ (utils/create-if-not-exist file-name)
           file-content (.readFileSync fs file-name "utf-8")
           r (t/reader :json)
           state (t/read r file-content)]
-      (print "Restore state now....")
+      (print "Restoring state now....")
       state)
-    (catch js/Error e {:cards []})))
+    (catch js/Error e
+      (do
+        (log "Exception while restoring state from file on disk. Returning empty state.")
+        {:cards []}))))
 
 ;; app state might contains entire application's configuration info
 (def app-state (atom {:cards []}))
-
 (def cards (atom {}))
 (def dispatchers (atom {}))
-
 (def styles (atom []))
-
 (def dispatcher-chan (chan))
 
-
 (defn put-result [result]
-  "Put a result into channel"
+  "Put a result into primary dispatcher channel"
   (go (>! dispatcher-chan result)))
 
 (let [win (.get (.-Window gui))
       w (t/writer :json)]
   (.on win "close" #(this-as me (do
-                                  (print "Start writing....")
+                                  (print "Saving current state...")
                                   (utils/write-to-file (str (utils/user-home) "/.assistant-store") (t/write w @app-state))
                                   (.close me true)))))
 
