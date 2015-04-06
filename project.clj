@@ -16,7 +16,7 @@
                  [reagent "0.5.0"]]
 
   :plugins [[lein-cljsbuild "1.0.5"]
-            [lein-node-webkit-build "0.1.7-SNAPSHOT" :exclusions [[org.apache.commons/commons-compress]
+            [lein-node-webkit-build "0.1.7" :exclusions [[org.apache.commons/commons-compress]
                                                          [com.fasterxml.jackson.core/jackson-databind]
                                                          [com.fasterxml.jackson.core/jackson-annotations]]]]
 
